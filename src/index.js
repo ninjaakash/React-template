@@ -5,10 +5,15 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Navbar from './Component/Navbar';
 
+import { GoogleOAuthProvider } from "@react-oauth/google";
+const clientId = "YOUR_GOOGLE_CLIENT_ID";
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
+        <GoogleOAuthProvider clientId={clientId}>
             <App />
+        </GoogleOAuthProvider>
   </React.StrictMode>
 );
 

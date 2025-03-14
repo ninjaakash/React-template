@@ -11,3 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.img-responsive {
+    width: 100%; /* Adjust width based on container */
+    max-width: 600px; /* Prevents image from becoming too large */
+    height: auto; /* Maintains aspect ratio */
+    object-fit: cover; /* Ensures image fits well */
+}

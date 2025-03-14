@@ -1,15 +1,24 @@
 ﻿import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { GoogleLogin, googleLogout } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 export default function Navbar() {
     const [user, setUser] = useState(null);
     const location = useLocation(); // Get current route
 
-    const handleLogin = () => {
-        setUser({ name: "John Doe", email: "johndoe@gmail.com", avatar: "https://via.placeholder.com/40" });
+    const handleLoginSuccess = (response) => {
+        const decoded = jwtDecode(response.credential); // Decode JWT
+        setUser({
+            name: decoded.name,
+            email: decoded.email,
+            avatar: decoded.picture,
+            token: response.credential, // Store JWT Token
+        });
     };
 
     const handleLogout = () => {
+        googleLogout();
         setUser(null);
     };
 
@@ -49,7 +58,7 @@ export default function Navbar() {
                         </li>
                     </ul>
 
-                    {/* Google Login Profile Section */}
+                    {/* Google Login Profile Section (Left Circular Icon) */}
                     <div className="ms-3">
                         {user ? (
                             <div className="dropdown">
@@ -66,10 +75,16 @@ export default function Navbar() {
                                 </ul>
                             </div>
                         ) : (
-                            <button className="btn btn-light rounded-circle p-1" onClick={handleLogin}>
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
-                                    alt="Google Login" width="30" height="30" />
-                            </button>
+                            <GoogleLogin
+                                onSuccess={handleLoginSuccess}
+                                onError={() => console.log("Login Failed")}
+                                render={(renderProps) => (
+                                    <button className="btn btn-light rounded-circle p-1" onClick={renderProps.onClick}>
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
+                                            alt="Google Login" width="30" height="30" />
+                                    </button>
+                                )}
+                            />
                         )}
                     </div>
                 </div>
